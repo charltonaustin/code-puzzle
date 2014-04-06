@@ -7,7 +7,8 @@
                  [ring-server "0.3.1"]
                  [ring/ring-json "0.3.0"]
                  [org.clojure/data.json "0.2.4"]
-                 [ring.middleware.logger "0.4.0"]]
+                 [ring.middleware.logger "0.4.0"]
+                 [log4j "1.2.17"]]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler code-puzzle.handler/app
          :init code-puzzle.handler/init

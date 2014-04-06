@@ -12,4 +12,4 @@
   (layout/common-json (key-word-fn "{\"message\" : \"Hello, world!\"}")))
 
 (defroutes home-routes
-  (GET "/" [] (home)))
+  (GET "/runatic/report" [] (home)))

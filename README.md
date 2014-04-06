@@ -36,9 +36,29 @@ Have fun! :)
 
 ## My Stuff
 
-Running
+## Prerequisites
+
+You will need [Vagrant][1] installed.
+
+[1]: http://www.vagrantup.com/
+
+
+To initialize things
+-----
+
+```
+$ vagrant up
+```
+
+Running the server
 -----
 
 ```
 $ ./go lein ring server-headless
+```
+
+Running tests
+-----
+```
+$ ./go lein test
 ```
