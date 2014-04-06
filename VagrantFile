@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise"
+
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+  config.vm.network :forwarded_port, guest: 3001, host: 3001
+
+  config.vm.provision :shell do |shell|
+    shell.inline = <<-EOS
+sudo apt-get -y update
+sudo apt-get -y install curl openjdk-7-jdk
+
+mkdir -p /home/vagrant/bin
+curl https://raw.github.com/technomancy/leiningen/stable/bin/lein > /home/vagrant/bin/lein
+chmod +x /home/vagrant/bin/lein
+echo "export PATH=$PATH:/home/vagrant/bin" > /home/vagrant/.bashrc
+
+EOS
+  end
+end

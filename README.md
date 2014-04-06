@@ -1,4 +1,4 @@
-# Build a Web API
+   # Build a Web API
 
 ## 
 A Runa customer, AwesomeShoes.com, needs a new report. They've given us their session data, which is a pipe delimited formatted file. Runa also has data stored in a CSV formatted file.  The report should compare the data in the 2 files, and builds a report which shows the discrepancies.
@@ -32,3 +32,13 @@ so that you can submit your best work.<br />
 Please include instructions for how to run your application and any tests.
 
 Have fun! :)
+
+
+## My Stuff
+
+Running
+-----
+
+```
+$ ./go lein ring server-headless
+```
