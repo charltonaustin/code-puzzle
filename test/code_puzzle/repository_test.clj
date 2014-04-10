@@ -2,23 +2,34 @@
   (:use clojure.test
         code-puzzle.repository))
 
-(def file-input "h1,h2,h3\n1,2,3\n4,5,6\n7,8,9")
+(def file-input "h1,h2,h3\n1,2,3\n")
+(def file-output (seq [(seq ["h1" "h2" "h3"]) (seq ["1" "2" "3"])]))
 (def double-seq (seq ["1.2" "1" "-3.2"]))
-(def new-line-pattern (re-pattern ".*\n"))
-(def elem-pattern (re-pattern "\\w+|\\d+,"))
+(def dollars (seq [1.2M -0.3M 1.23M]))
 
 
-(deftest repository-test
+(deftest test-break-into-lines
   (testing "break into lines"
-    (let [actual (break-into-lines new-line-pattern file-input)]
+    (let [actual (break-into-lines file-input)]
       (is (= (first actual) "h1,h2,h3\n")))))
 
-(deftest repository-test-1
+(deftest test-break-into-elem
   (testing "break into individual elements"
-    (is (= (break-into-elem elem-pattern "h1,h2,h3\n") (seq ["h1" "h2" "h3"])))
-    (is (= (break-into-elem elem-pattern "1,2,3\n") (seq ["1" "2" "3"])))
-    (is (= (break-into-elem elem-pattern "7,8,9") (seq ["7" "8" "9"])))))
+    (is (= (break-into-elem "h1,h2,h3\n") (seq ["h1" "h2" "h3"])))
+    (is (= (break-into-elem "1,2,3\n") (seq ["1" "2" "3"])))
+    (is (= (break-into-elem "1|2|3\n") (seq ["1" "2" "3"])))
+    (is (= (break-into-elem "First Column|Second Column|Third\n")
+          (seq ["First Column" "Second Column" "Third"])))
+    (is (= (break-into-elem "7,8,9") (seq ["7" "8" "9"])))))
 
-(deftest repository-test-2
+(deftest test-parse-doubles
   (testing "parse doubles"
-    (is (= (parse-doubles double-seq) (seq [1.2 1.0 -3.2])))))
+    (is (= (parse-big-dec double-seq) (seq [1.2M 1M -3.2M])))))
+
+(deftest test-dollars-to-cents
+  (testing "dollars to cents")
+  (is (= (dollars-to-cents dollars) (seq [120.0M -30.0M 123.00M]))))
+
+(deftest test-break-into-elems
+  (testing "break multiple lines into elems"
+    (is (= (break-into-elems (break-into-lines file-input)) file-output))))

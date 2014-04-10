@@ -1,17 +1,29 @@
 (ns code-puzzle.repository)
 
-(defn create-pattern [pattern]
-  (re-pattern pattern))
+(defn break-into-lines [string]
+  (re-seq (re-pattern "[a-zA-Z_0-9 ,|]+\n") string))
 
-(defn break-into-lines [pattern, string]
-  (re-seq pattern string))
+(defn break-into-elem [string]
+  (re-seq (re-pattern "[a-zA-Z_0-9 \t]+") string))
 
-(defn break-into-elem [pattern, string]
-  (re-seq pattern string))
+(defn parse-big-dec [strings]
+  (map bigdec strings))
 
-(defn parse-doubles [strings]
-  (map #(Double/parseDouble %1) strings))
+(defn dollars-to-cents [dollars]
+  (map #(* 100M %1) dollars))
+
+(defn break-into-elems [lines]
+  (map break-into-elem lines))
 
 (defn get-csv []
-  (slurp "resources/runa_data.csv"))
+  (let [csv (slurp "resources/runa_data.csv")]
+    (->
+      (break-into-lines csv)
+      (break-into-elems))))
+
+(defn get-psv []
+  (let [csv (slurp "resources/merchant_data.psv")]
+    (->
+      (break-into-lines csv)
+      (break-into-elems))))
 
