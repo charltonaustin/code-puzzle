@@ -5,7 +5,7 @@
 (def file-input "h1,h2,h3\n1,2,3\n")
 (def file-output (seq [(seq ["h1" "h2" "h3"]) (seq ["1" "2" "3"])]))
 (def double-seq (seq ["1.2" "1" "-3.2"]))
-(def dollars (seq [1.2M -0.3M 1.23M]))
+(def cents (seq [1200M -30M 123M]))
 
 
 (deftest test-break-into-lines
@@ -26,10 +26,16 @@
   (testing "parse doubles"
     (is (= (parse-big-dec double-seq) (seq [1.2M 1M -3.2M])))))
 
-(deftest test-dollars-to-cents
-  (testing "dollars to cents")
-  (is (= (dollars-to-cents dollars) (seq [120.0M -30.0M 123.00M]))))
+(deftest test-cents-to-dollars
+  (testing "cents to dollars")
+  (is (= (map cents-to-dollars cents) (seq [12M -0.3M 1.23M]))))
 
 (deftest test-break-into-elems
   (testing "break multiple lines into elems"
     (is (= (break-into-elems (break-into-lines file-input)) file-output))))
+
+(deftest test-to-lower-case
+  (testing "turn strings to lower case"
+    (is (= (to-lower-case-line (seq ["FirST234" "SEC OND"])) (seq ["first234" "sec ond"]))))
+  (testing "remove spaces from strings"
+    (is (= (remove-spaces-line (seq ["cats and dogs" "kittens rock!"])) (seq ["cats-and-dogs" "kittens-rock!"])))))
