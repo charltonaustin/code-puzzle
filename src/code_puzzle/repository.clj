@@ -1,5 +1,8 @@
 (ns code-puzzle.repository)
 
+(def csv (slurp "resources/runa_data.csv"))
+(def psv (slurp "resources/merchant_data.psv"))
+
 (defn break-into-lines [string]
   (re-seq (re-pattern "[a-zA-Z_0-9 ,|.]+\n") string))
 
@@ -21,9 +24,14 @@
 (defn break-into-elems [lines]
   (map break-into-elem lines))
 
-(defn create-map [something]
-  (def head (first something))
-  (def tail (rest something))
+(defn convert-dollars [map-with-cents diss-field assco-field]
+  (def assoc-value (cents-to-dollars (diss-field map-with-cents)))
+  (dissoc map-with-cents diss-field)
+  (assoc map-with-cents assco-field assoc-value))
+
+(defn create-map [from-file]
+  (def head (first from-file))
+  (def tail (rest from-file))
   (map #(zipmap head %1) tail))
 
 (defn to-lower-case [elements]
@@ -32,21 +40,17 @@
 (defn remove-spaces [elements]
   (map remove-spaces-line elements))
 
-(defn runa-data []
-  (let [csv (slurp "resources/runa_data.csv")]
-    (->
-      (break-into-lines csv)
-      (break-into-elems)
-      (to-lower-case)
-      (remove-spaces)
-      (create-map))))
+(defn process-data [data-source]
+  (->
+    (break-into-lines data-source)
+    (break-into-elems)
+    (to-lower-case)
+    (remove-spaces)
+    (create-map)))
 
-(defn merchant-data []
-  (let [psv (slurp "resources/merchant_data.psv")]
-    (->
-      (break-into-lines psv)
-      (break-into-elems)
-      (to-lower-case)
-      (remove-spaces)
-      (create-map))))
+(defn merchant-data
+  (process-data psv))
+
+(defn runa-data
+  (process-data csv))
 

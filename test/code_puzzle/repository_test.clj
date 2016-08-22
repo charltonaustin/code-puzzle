@@ -2,8 +2,8 @@
   (:use clojure.test
         code-puzzle.repository))
 
-(def file-input "h1,h2,h3\n1,2,3\n")
-(def file-output (seq [(seq ["h1" "h2" "h3"]) (seq ["1" "2" "3"])]))
+(def file-input "h 1,H2,H 3\n1,2,3\n")
+(def file-output (seq [(seq ["h 1" "H2" "H 3"]) (seq ["1" "2" "3"])]))
 (def double-seq (seq ["1.2" "1" "-3.2"]))
 (def cents (seq [1200M -30M 123M]))
 
@@ -11,7 +11,7 @@
 (deftest test-break-into-lines
   (testing "break into lines"
     (let [actual (break-into-lines file-input)]
-      (is (= (first actual) "h1,h2,h3\n")))))
+      (is (= (first actual) "h 1,H2,H 3\n")))))
 
 (deftest test-break-into-elem
   (testing "break into individual elements"
@@ -36,6 +36,6 @@
 
 (deftest test-to-lower-case
   (testing "turn strings to lower case"
-    (is (= (to-lower-case-line (seq ["FirST234" "SEC OND"])) (seq ["first234" "sec ond"]))))
+    (is (= (first (to-lower-case file-output)) (seq ["h 1" "h2" "h 3"]))))
   (testing "remove spaces from strings"
-    (is (= (remove-spaces-line (seq ["cats and dogs" "kittens rock!"])) (seq ["cats-and-dogs" "kittens-rock!"])))))
+    (is (= (first (remove-spaces file-output)) (seq ["h-1" "H2" "H-3"])))))
